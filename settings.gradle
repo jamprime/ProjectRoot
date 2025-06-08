@@ -1,0 +1,4 @@
+rootProject.name = 'ProjectRoot'
+include 'project-command'
+include 'project-query'
+include 'project-events' 
