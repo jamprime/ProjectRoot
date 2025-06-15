@@ -1,3 +1,12 @@
-FROM eclipse-temurin:17-jammy
-COPY build/libs/project-command-0.0.1-SNAPSHOT.jar project-command.jar
-ENTRYPOINT ["java", "-jar", "project-command.jar"]
+# Build stage
+FROM gradle:8.5-jdk17 AS build
+WORKDIR /app
+COPY . .
+RUN ./gradlew build --no-daemon
+
+# Run stage
+FROM amazoncorretto:17-alpine
+WORKDIR /app
+COPY --from=build /app/project-command/build/libs/*.jar app.jar
+EXPOSE 8081
+ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -22,7 +22,7 @@ public class TaskEventHandler {
 
     @RabbitListener(queues = "${rabbitmq.queue.tasks_name}")
     @Transactional
-    @CacheEvict(value = {"tasks", "allTasks"}, allEntries = true)
+    @CacheEvict(value = {"tasks", "activeTasks", "deletedTasks"}, allEntries = true)
     public void handleTaskEvent(TaskEvent event) {
         log.info("Received event: {} with type: {}", event, event.getClass().getSimpleName());
         try {

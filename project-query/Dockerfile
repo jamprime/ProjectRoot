@@ -1,3 +1,12 @@
-FROM eclipse-temurin:17-jammy
-COPY build/libs/project-query-0.0.1-SNAPSHOT.jar project-query.jar
-ENTRYPOINT ["java", "-jar", "project-query.jar"]
+# Build stage
+FROM gradle:8.5-jdk17 AS build
+WORKDIR /app
+COPY . .
+RUN ./gradlew build --no-daemon
+
+# Run stage
+FROM amazoncorretto:17-alpine
+WORKDIR /app
+COPY --from=build /app/project-query/build/libs/*.jar app.jar
+EXPOSE 8082
+ENTRYPOINT ["java", "-jar", "app.jar"]
