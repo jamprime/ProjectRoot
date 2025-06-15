@@ -2,9 +2,11 @@ version: '3.8'
 services:
 
   command-app:
-    build: ./project-command
+    build:
+      context: .
+      dockerfile: project-command/Dockerfile
     ports:
-      - "8081:8080"
+      - "8081:8081"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_command:5432/task_event_store
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -26,9 +28,11 @@ services:
       retries: 3
 
   query-app:
-    build: ./project-query
+    build:
+      context: .
+      dockerfile: project-query/Dockerfile
     ports:
-      - "8082:8080"
+      - "8082:8082"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_read:5432/task_read_model
       - SPRING_DATASOURCE_USERNAME=postgres
